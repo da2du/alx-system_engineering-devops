@@ -1,4 +1,5 @@
 #!/bin/bash/
+echo "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"
 git add .
 git commit -m "bash"
 git push origin master
