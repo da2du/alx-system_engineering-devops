@@ -1,2 +1,1 @@
-# Configuration management
- 
+# PROJECT ON CONFIGURATION MANAGEMENT

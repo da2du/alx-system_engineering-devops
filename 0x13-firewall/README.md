@@ -1,3 +1,1 @@
-# Synopsis
-
-Learning about firewall configuration
+# PROJECT ON FIREWALL

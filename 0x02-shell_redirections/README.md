@@ -1,1 +1,1 @@
-this is bash 0x02
+Shell redirections

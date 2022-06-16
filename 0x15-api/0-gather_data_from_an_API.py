@@ -1,37 +1,30 @@
 #!/usr/bin/python3
-import requests
-import sys
-
-
-def tasks_done(id):
-    '''Script that displays an employee completed TODO tasks in stout
-        Parameters:
-        employee_id: Is an interger representing an employee id.
-    '''
-
-    url = "https://jsonplaceholder.typicode.com/users/{}".format(id)
-    response = requests.get(url)
-    response_json = response.json()
-    employee_name = response_json.get("name")
-
-    url = "https://jsonplaceholder.typicode.com/users/{}/todos".format(id)
-    todos = requests.get(url)
-    todos_json = todos.json()
-    number_tasks = len(todos_json)
-
-    task_compleated = 0
-    task_list = ""
-
-    for task in todos_json:
-        if task.get("completed") is True:
-            task_compleated += 1
-            task_list += "\t " + task.get("title") + "\n"
-
-    print("Employee {} is done with tasks({}/{}):".format(employee_name,
-                                                          task_compleated,
-                                                          number_tasks))
-    print(task_list[:-1])
+"""Python script"""
 
 
 if __name__ == "__main__":
-    tasks_done(sys.argv[1])
+    import requests
+    import sys
+
+    NUMBER_OF_DONE_TASKS = TOTAL_NUMBER_OF_TASKS = 0
+    titles = []
+    id = sys.argv[1]
+    api_url = "https://jsonplaceholder.typicode.com/todos/"
+    api_url2 = "https://jsonplaceholder.typicode.com/users/" + id
+    todos = requests.get(api_url)
+    name = requests.get(api_url2)
+    todos = todos.json()
+    name = name.json()
+    EMPLOYEE_NAME = name["name"]
+    Userid = name["id"]
+
+    for i in range(len(todos)):
+        if todos[i]["userId"] == int(id):
+            TOTAL_NUMBER_OF_TASKS += 1
+            if todos[i]["completed"]:
+                NUMBER_OF_DONE_TASKS += 1
+                titles.append(todos[i]["title"])
+    print(f"Employee {EMPLOYEE_NAME} is done with tasks", end=" ")
+    print(f"({NUMBER_OF_DONE_TASKS}/{TOTAL_NUMBER_OF_TASKS})")
+    for title in titles:
+        print("\t " + title)

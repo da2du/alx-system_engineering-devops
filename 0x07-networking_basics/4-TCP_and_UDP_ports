@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
-# prints the active ports
-netstat -l -p
+# displays listening ports
+
+netstat -l --program
