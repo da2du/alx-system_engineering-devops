@@ -1,27 +1,18 @@
 #!/usr/bin/python3
-"""Python script to export data in the JSON format"""
-
-import requests
+"""Exports to-do list information of all employees to JSON format."""
 import json
-
+import requests
 
 if __name__ == "__main__":
-    js_file = {}
-    api_url = f"https://jsonplaceholder.typicode.com/todos/"
-    api_url2 = f"https://jsonplaceholder.typicode.com/users/"
-    todos = requests.get(api_url)
-    name = requests.get(api_url2)
-    todos = todos.json()
-    name = name.json()
+    url = "https://jsonplaceholder.typicode.com/"
+    users = requests.get(url + "users").json()
 
-    for n in name:
-        ut = [todo for todo in todos
-              if todo.get('userId') == n.get('id')]
-        ut = [{'username': n.get('username'),
-               'task': todo.get('title'),
-               'completed': todo.get('completed')}
-              for todo in ut]
-        js_file[str(n.get('id'))] = ut
-
-    with open('todo_all_employees.json', 'w') as f:
-        json.dump(js_file, f)
+    with open("todo_all_employees.json", "w") as jsonfile:
+        json.dump({
+            u.get("id"): [{
+                "task": t.get("title"),
+                "completed": t.get("completed"),
+                "username": u.get("username")
+            } for t in requests.get(url + "todos",
+                                    params={"userId": u.get("id")}).json()]
+            for u in users}, jsonfile)

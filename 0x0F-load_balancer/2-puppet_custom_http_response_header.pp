@@ -1,8 +1,23 @@
-# A Puppet script that configures the Nginx so that its HTTP response contains a custom header
-exec { 'command':
-  command => 'apt-get -y update;
-  apt-get -y install nginx;
-  sudo sed -i "/listen 80 default_server;/a add_header X-Served-By $HOSTNAME;" /etc/nginx/sites-available/default;
-  service nginx restart',
-  provider => shell,
-  }
+#Add a custom HTTP header with Puppet
+
+exec { 'apt-update':
+  command => '/usr/bin/apt update',
+}
+
+package { 'nginx':
+    ensure  => present,
+    require => Exec['apt-update'],
+}
+
+file_line {'Adding_Header':
+    ensure  => 'present',
+    path    => '/etc/nginx/sites-available/default',
+    after   => 'listen 80 default_server;',
+    line    => 'add_header X-Served-By $hostname;',
+    require => Package['nginx'],
+}
+
+service { 'nginx':
+    ensure  => running,
+    require => Package['nginx'],
+}
